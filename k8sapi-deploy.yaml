@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8sapi-invoker
+  labels:
+    app: k8sapi-invoker
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 25%
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8sapi-invoker
+  template:
+    metadata:
+      labels:
+        app: k8sapi-invoker
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: k8sapi-invoker
+      containers:
+      - name: sever
+        image: k8s_api_invoker:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8111
+          protocol: TCP

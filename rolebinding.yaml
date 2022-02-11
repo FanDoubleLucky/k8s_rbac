@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+subjects:
+# 你可以指定不止一个“subject（主体）”
+- kind: ServiceAccount
+  name: k8sapi-invoker # "name" 是区分大小写的
+roleRef:
+  # "roleRef" 指定与某 Role 或 ClusterRole 的绑定关系
+  kind: Role # 此字段必须是 Role 或 ClusterRole
+  name: reader-role     # 此字段必须与你要绑定的 Role 或 ClusterRole 的名称匹配
+  apiGroup: rbac.authorization.k8s.io
